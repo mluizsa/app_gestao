@@ -33,3 +33,10 @@ Route::get('/contato', 'ContatoController@contato');
  * delete
  * options
  */
+
+//nome, categoria, assunto e mensagem
+Route::get('/contato/{nome}/{categoria}/{assunto}/{mensagem}',
+    function(string $nome, string $categoria, string $assunto, string $mensagem){
+        echo 'Estamos aqui: '.$nome.':: Categoria: '.$categoria.':: Assunto: '.$assunto.':: Mensagem: '.$mensagem;
+    }
+);
