@@ -17,13 +17,6 @@ use Illuminate\Support\Facades\Route;
     return 'Olá, seja bem-vindo ao curso!';
 });*/
 
-Route::get('/', 'PrincipalController@principal');
-
-Route::get('/sobre-nos', 'SobreNosController@sobrenos');
-
-
-Route::get('/contato', 'ContatoController@contato');
-
 /**
  * Verbos http:
  * get
@@ -34,9 +27,29 @@ Route::get('/contato', 'ContatoController@contato');
  * options
  */
 
-//nome, categoria, assunto e mensagem
-Route::get('/contato/{nome}/{categoria}/{assunto}/{mensagem}',
-    function(string $nome, string $categoria, string $assunto, string $mensagem){
-        echo 'Estamos aqui: '.$nome.':: Categoria: '.$categoria.':: Assunto: '.$assunto.':: Mensagem: '.$mensagem;
-    }
-);
+Route::get('/', 'PrincipalController@principal')->name('site.index');
+Route::get('/sobre-nos', 'SobreNosController@sobrenos')->name('site.sobrenos');
+Route::get('/contato', 'ContatoController@contato')->name('site.contato');
+Route::get('/login', function(){return 'Login';})->name('site.login');
+
+Route::prefix('/app')->group(function(){
+    Route::get('/clientes', function(){return 'Clientes';})->name('app.clientes');
+    Route::get('/fornecedores', function(){return 'Fornecedores';})->name('app.fornecedores');
+    Route::get('/produtos', function(){return 'Produtos';})->name('app.produtos');
+});
+
+
+//Rotas de redirecionamentos
+
+Route::get('/rota1', function(){
+    echo "Rota 1";
+})->name('site.rota1');
+
+Route::get('/rota2', function(){
+   return redirect()->route('site.rota1');
+})->name('site.rota2');
+//Route::redirect('/rota2', 'rota1');
+
+Route::fallback(function(){
+    echo 'A rota acessada não existe. <a href="'.route('site.index').'">Clique aqui</a> para ir para a página inicial';
+});
