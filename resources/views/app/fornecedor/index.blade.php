@@ -29,41 +29,102 @@
 
 @isset($fornecedores)
     <br />
-    <br />
-    Fornecedor: {{ $fornecedores[0]['nome'] }}
-    <br />
-    Status: {{ $fornecedores[0]['status'] }}
-    <br />
-    @if( !($fornecedores[0]['status'] == 'S'))
-        Fornecedor Inativo
-    @endif
-    <br />
-        CNPJ: {{ $fornecedores[0]['cnpj'] ?? 'Dado não foi preenchido' }}
+    <hr>
+    @php $i = 0 @endphp
+    @while(isset($fornecedores[$i]))
 
-        <!-- $var testada não definida ou null -->
-    <br />
+        Fornecedor: {{ $fornecedores[$i]['nome'] }}
+        <br />
+        Status: {{ $fornecedores[$i]['status'] }}
+        <br />
+        @if( !($fornecedores[$i]['status'] == 'S'))
+            Fornecedor Inativo
+        @endif
+        <br />
+            CNPJ: {{ $fornecedores[$i]['cnpj'] ?? 'Dado não foi preenchido' }}
+            <!-- $var testada não definida ou null -->
+        <br />
+        Telefone: ({{ $fornecedores[$i]['ddd'] }}) {{ $fornecedores[$i]['telefone'] }}
+        <br />
+        @switch($fornecedores[$i]['ddd'])
+            @case('11')
+                São Paulo - SP
+                @break
+            @case('32')
+                Juiz de Fora - MG
+                @break
+            @case('85')
+                Fortaleza -  CE
+                @break
+            @default
+                Estado não identificado
+        @endswitch
+        <hr>
+        <br />
+        @php $i++  @endphp
 
-    <br /><br />
-    @unless($fornecedores[0]['status'] == 'S') <!-- se o retorno da condição for false -->
-        Fornecedor Inativo
-    @endunless
-    <br />
+    @endwhile
 
-    <br />
-    Fornecedor: {{ $fornecedores[1]['nome'] }}
-    <br />
-    Status: {{ $fornecedores[1]['status'] }}
-    <br />
-    @if( !($fornecedores[1]['status'] == 'S'))
-        Fornecedor Inativo
-    @endif
-    <br />
-      CNPJ: {{ $fornecedores[1]['cnpj'] ?? 'Dado não foi preenchido' }}
-    <br />
 
+<p>Sintaxe for</p>
+
+@for($i = 0; $i < 10; $i++ )
+    {{ $i }}
+    <br />
+@endfor
+
+
+<p>Sintaxe foreach</p>
+
+    @forelse ($fornecedores as $indice => $fornecedor )
+
+        Interação atual: {{ $loop->iteration }}
+        <br />
+        Fornecedor: {{ $fornecedor['nome'] }}
+        <br />
+        Status: {{ $fornecedor['status'] }}
+        <br />
+        @if( !($fornecedor['status'] == 'S'))
+            Fornecedor Inativo
+        @endif
+        <br />
+            CNPJ: {{ $fornecedor['cnpj'] ?? 'Dado não foi preenchido' }}
+            <!-- $var testada não definida ou null -->
+        <br />
+        Telefone: ({{ $fornecedor['ddd'] }}) {{ $fornecedor['telefone'] }}
+        <br />
+        @switch($fornecedor['ddd'])
+            @case('11')
+                São Paulo - SP
+                @break
+            @case('32')
+                Juiz de Fora - MG
+                @break
+            @case('85')
+                Fortaleza -  CE
+                @break
+            @default
+                Estado não identificado
+        @endswitch
+        <br />
+        @if( $loop->first )
+            Primeira interação do Loop
+        @endif
+        <br />
+
+        @if( $loop->last )
+            Última interação do Loop
+            <br /> Total de Registros: {{ $loop->count}}
+        @endif
+        <br />
+
+
+        <br />
+        <hr>
+        <br />
+    @empty
+
+    Não existe fornecedores
+    @endforelse
 
 @endisset
-<hr>
-
-
-
