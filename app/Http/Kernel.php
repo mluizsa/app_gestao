@@ -37,7 +37,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
 
-            //\App\Http\Middleware\LogAcessoMiddleware::class,
+            \App\Http\Middleware\LogAcessoMiddleware::class,
 
         ],
 
@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'log.acesso' => \App\Http\Middleware\LogAcessoMiddleware::class,
+
+        'autenticacao' => \App\Http\Middleware\AutenticacaoMiddleware::class,
     ];
 }
