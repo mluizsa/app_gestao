@@ -39,7 +39,6 @@ Route::post('/login', 'LoginController@autenticar')->name('site.login');
 Route::middleware('autenticacao:padrao,visitante')->prefix('/app')->group(function(){
     Route::get('/home', 'HomeController@index')->name('app.home');
     Route::get('/sair', 'LoginController@sair')->name('app.sair');
-    Route::get('/cliente', 'ClienteController@index')->name('app.cliente');
 
     Route::get('/fornecedor', 'FornecedorController@index')->name('app.fornecedor');
     Route::post('/fornecedor/listar', 'FornecedorController@listar')->name('app.fornecedor.listar');
@@ -52,17 +51,24 @@ Route::middleware('autenticacao:padrao,visitante')->prefix('/app')->group(functi
     //Rotas de produtos
     Route::resource('produto','ProdutoController');
 
-
     //Produto detalhes
     Route::resource('produto-detalhe','ProdutoDetalheController');
 
+    //Cliente detalhes
+    Route::resource('cliente','ClienteController');
+
+    //Pedido detalhes
+    Route::resource('pedido','PedidoController');
+
+    //Pedido Produto detalhes
+    Route::resource('pedido-produto','PedidoProdutoController');
 });
 
 Route::get('/teste/{p1}/{p2}', 'TesteController@teste')->name('teste');
 
 
 
-//Rotas de redirecionamentos
+//Rotas de redirecionamentos_
 /*
     Route::get('/rota1', function(){
         echo "Rota 1";
