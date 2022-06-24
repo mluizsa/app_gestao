@@ -19,4 +19,15 @@ class Item extends Model
     {
         return $this->belongsTo('App\Fornecedor');
     }
+
+    public function pedidos()
+    {
+        return $this->BelongsToMany('App\Pedido', 'pedidos_produtos', 'produto_id', 'pedido_id');
+
+        /*
+            3 paramento, representa o nome da fk da tabela mapeado pelo model da tabela de relacionamento
+            4 paramento, representa o nome da fk da tabela mapeada pelo model utilizada no relacionamento que estamos implementando
+        */
+    }
+
 }

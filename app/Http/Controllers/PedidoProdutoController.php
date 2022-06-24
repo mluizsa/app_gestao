@@ -40,22 +40,42 @@ class PedidoProdutoController extends Controller
     public function store(Request $request, Pedido $pedido)
     {
         $regras = [
-            'produto_id' => 'exists:produtos,id'
+            'produto_id' => 'exists:produtos,id',
+            'quantidade' => 'required'
         ];
 
         $feedback = [
-            'produto_id.exists' => 'O Produto informado não existe'
+            'produto_id.exists'   => 'O Produto informado não existe',
+            'quantidade.required' => 'O Campo :attribute deve possuir um valor válido'
         ];
 
         $request->validate($regras, $feedback);
 
-        $pedido_produto = new PedidoProduto();
+        /*$pedido_produto = new PedidoProduto();
 
         $pedido_produto->pedido_id = $pedido->id;
         $pedido_produto->produto_id = $request->get('produto_id');
+        $pedido_produto->quantidade = $request->get('quantidade');
+
+        $pedido_produto->save();*/
+
+        /* forma unitária para inserção
+
+            $pedido->produtos()->attach(
+                $request->get('produto_id'),
+                [
+                    'quantidade' => $request->get('quantidade')
+                ]
+            );
+        */
+
+        // inserção em massa
+        $pedido->produtos()->attach([
+            $request->get('produto_id') => ['quantidade' => $request->get('quantidade')]
+        ]);
 
 
-        $pedido_produto->save();
+
 
         return redirect()->route('pedido-produto.create', ['pedido'=> $pedido->id]);
 
@@ -102,8 +122,35 @@ class PedidoProdutoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(PedidoProduto $pedidoProduto, $pedido_id)
     {
-        //
+
+        /*print_r($pedido->getAttributes());
+        echo '<hr>';
+        print_r($produto->getAttributes());*/
+
+
+        //echo $pedido->id .'-'. $produto->id;
+
+        //metodo convencional
+        /*
+        PedidoProduto::where([
+            'pedido_id' => $pedido->id,
+            'produto_id' => $produto->id
+        ])->delete();
+        */
+
+        //metodo de utilizar os relacionamentos (detach)
+        //$pedido->produtos()->detach($produto->id);
+
+        //$produto->pedidos()->detach($pedido->id); Outra forma
+            //Pedido_id já é pertecente ao objeto instanciando
+
+
+
+        $pedidoProduto->delete();
+
+            return redirect()->route('pedido-produto.create', ['pedido'=> $pedido_id]);
+
     }
 }
